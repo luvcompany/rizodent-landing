@@ -1,6 +1,7 @@
-// ===== RizoDent Landing Page =====
+// ===== RizoDent Landing Page v2 =====
+const WHATSAPP = '5577981147531';
 
-// Menu mobile
+// ---- Menu mobile ----
 const navToggle = document.getElementById('navToggle');
 const nav = document.getElementById('nav');
 
@@ -18,22 +19,21 @@ nav.querySelectorAll('a').forEach((link) => {
   });
 });
 
-// Animação de entrada (scroll reveal)
-const observer = new IntersectionObserver(
+// ---- Scroll reveal ----
+const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+        revealObserver.unobserve(entry.target);
       }
     });
   },
-  { threshold: 0.12 }
+  { threshold: 0.1 }
 );
-document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
 
-// Contador animado das estatísticas
-const counters = document.querySelectorAll('[data-count]');
+// ---- Contadores ----
 const counterObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -56,55 +56,200 @@ const counterObserver = new IntersectionObserver(
   },
   { threshold: 0.5 }
 );
-counters.forEach((el) => counterObserver.observe(el));
+document.querySelectorAll('[data-count]').forEach((el) => counterObserver.observe(el));
 
-// Máscara de telefone (formato brasileiro)
-const phoneInput = document.getElementById('telefone');
-phoneInput.addEventListener('input', () => {
-  let v = phoneInput.value.replace(/\D/g, '').slice(0, 11);
-  if (v.length > 6) {
-    v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
-  } else if (v.length > 2) {
-    v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
-  } else if (v.length > 0) {
-    v = `(${v}`;
-  }
-  phoneInput.value = v;
+// ---- Tabs de tratamentos ----
+const tabs = document.querySelectorAll('.tab');
+const panels = document.querySelectorAll('.tab-panel');
+
+tabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    tabs.forEach((t) => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+
+    panels.forEach((panel) => {
+      const active = panel.id === `panel-${tab.dataset.tab}`;
+      panel.hidden = !active;
+      panel.classList.toggle('active', active);
+      if (active) {
+        panel.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
+      }
+    });
+  });
 });
 
-// Envio do formulário → abre o WhatsApp da clínica com a mensagem preenchida.
-// Para integrar com um CRM ou e-mail, substitua este bloco pelo envio à sua API.
-const form = document.getElementById('leadForm');
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
+// ---- Quiz ----
+const quizBox = document.getElementById('quizBox');
+const quizSteps = quizBox.querySelectorAll('.quiz__step');
+const quizProgress = document.getElementById('quizProgress');
+const quizResult = document.getElementById('quizResult');
+const quizAnswers = [];
 
-  const nome = form.nome.value.trim();
-  const telefone = form.telefone.value.replace(/\D/g, '');
-  const interesse = form.interesse.value;
-  const mensagem = form.mensagem.value.trim();
+// Mapeia a 1ª resposta (situação) para a recomendação principal
+const RECOMMENDATIONS = {
+  um: {
+    title: 'Implante Unitário',
+    text: 'Pelo seu perfil, o implante unitário tende a ser o caminho: substitui o dente perdido por um pino de titânio com coroa de porcelana, sem desgastar os dentes vizinhos e com resultado natural e definitivo.',
+  },
+  todos: {
+    title: 'Protocolo — Prótese Fixa Total',
+    text: 'Pelo seu perfil, o protocolo tende a ser o caminho: uma prótese completa fixada sobre 4 a 6 implantes, que devolve a mastigação, a estética e a segurança de dentes fixos.',
+  },
+  dentadura: {
+    title: 'Overdenture ou Protocolo',
+    text: 'Quem não se adapta à dentadura costuma se beneficiar da overdenture (prótese encaixada sobre implantes) ou do protocolo (prótese fixa). A avaliação define qual faz mais sentido para o seu caso e orçamento.',
+  },
+  estetica: {
+    title: 'Estética do Sorriso',
+    text: 'Pelo seu perfil, tratamentos como lentes de contato dental, facetas e clareamento tendem a ser o caminho para transformar o seu sorriso sem procedimentos invasivos.',
+  },
+};
 
-  let valid = true;
-  [form.nome, form.telefone].forEach((field) => field.classList.remove('invalid'));
-  if (!nome) {
-    form.nome.classList.add('invalid');
-    valid = false;
-  }
-  if (telefone.length < 10) {
-    form.telefone.classList.add('invalid');
-    valid = false;
-  }
-  if (!valid) return;
+quizSteps.forEach((step, index) => {
+  step.querySelectorAll('.quiz__options button').forEach((option) => {
+    option.addEventListener('click', () => {
+      quizAnswers[index] = option.dataset.value;
+      const next = quizSteps[index + 1];
+      step.classList.remove('active');
 
-  let texto = `Olá! Quero agendar uma avaliação na RizoDent.\n\n*Nome:* ${nome}\n*Telefone:* ${form.telefone.value}`;
-  if (interesse) texto += `\n*Interesse:* ${interesse}`;
-  if (mensagem) texto += `\n*Mensagem:* ${mensagem}`;
-
-  window.open(`https://wa.me/5577981147531?text=${encodeURIComponent(texto)}`, '_blank');
-
-  const btn = form.querySelector('button[type="submit"]');
-  btn.textContent = '✓ Abrindo o WhatsApp...';
-  setTimeout(() => {
-    btn.textContent = 'Quero agendar minha avaliação';
-    form.reset();
-  }, 3000);
+      if (next) {
+        next.classList.add('active');
+        quizProgress.style.width = `${((index + 2) / quizSteps.length) * 100}%`;
+      } else {
+        showQuizResult();
+      }
+    });
+  });
 });
+
+function showQuizResult() {
+  const rec = RECOMMENDATIONS[quizAnswers[0]] || RECOMMENDATIONS.estetica;
+  quizProgress.style.width = '100%';
+  document.getElementById('quizResultTitle').textContent = `Indicação inicial: ${rec.title}`;
+  document.getElementById('quizResultText').textContent = rec.text;
+
+  const msg = `Olá! Fiz o teste do site e a indicação inicial foi: ${rec.title}. Quero agendar uma avaliação para confirmar.`;
+  document.getElementById('quizWhats').href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  quizResult.hidden = false;
+}
+
+document.getElementById('quizRestart').addEventListener('click', () => {
+  quizAnswers.length = 0;
+  quizResult.hidden = true;
+  quizSteps.forEach((step, i) => step.classList.toggle('active', i === 0));
+  quizProgress.style.width = '33%';
+});
+
+// ---- Carrossel de depoimentos ----
+const track = document.getElementById('carouselTrack');
+const dotsWrap = document.getElementById('carouselDots');
+const quotes = track.children.length;
+let perView = window.innerWidth <= 1020 ? 1 : 2;
+let pages = Math.ceil(quotes / perView);
+let page = 0;
+let autoTimer;
+
+function buildDots() {
+  dotsWrap.innerHTML = '';
+  for (let i = 0; i < pages; i++) {
+    const dot = document.createElement('button');
+    dot.setAttribute('aria-label', `Ir para o grupo ${i + 1}`);
+    dot.addEventListener('click', () => goTo(i, true));
+    dotsWrap.appendChild(dot);
+  }
+  updateDots();
+}
+
+function updateDots() {
+  [...dotsWrap.children].forEach((d, i) => d.classList.toggle('active', i === page));
+}
+
+function goTo(target, manual = false) {
+  page = (target + pages) % pages;
+  track.style.transform = `translateX(-${page * 100}%)`;
+  updateDots();
+  if (manual) restartAuto();
+}
+
+function restartAuto() {
+  clearInterval(autoTimer);
+  autoTimer = setInterval(() => goTo(page + 1), 6000);
+}
+
+document.getElementById('carouselPrev').addEventListener('click', () => goTo(page - 1, true));
+document.getElementById('carouselNext').addEventListener('click', () => goTo(page + 1, true));
+
+window.addEventListener('resize', () => {
+  const newPerView = window.innerWidth <= 1020 ? 1 : 2;
+  if (newPerView !== perView) {
+    perView = newPerView;
+    pages = Math.ceil(quotes / perView);
+    page = 0;
+    track.style.transform = 'translateX(0)';
+    buildDots();
+  }
+});
+
+buildDots();
+restartAuto();
+
+// ---- Máscara de telefone ----
+function applyPhoneMask(input) {
+  input.addEventListener('input', () => {
+    let v = input.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 6) {
+      v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+    } else if (v.length > 2) {
+      v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+    } else if (v.length > 0) {
+      v = `(${v}`;
+    }
+    input.value = v;
+  });
+}
+
+// ---- Formulários → WhatsApp ----
+// Para integrar com um CRM ou e-mail, substitua o window.open pelo envio à sua API.
+function bindLeadForm(form) {
+  applyPhoneMask(form.telefone);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const nome = form.nome.value.trim();
+    const telefone = form.telefone.value.replace(/\D/g, '');
+    const interesse = form.interesse ? form.interesse.value : '';
+
+    let valid = true;
+    [form.nome, form.telefone].forEach((field) => field.classList.remove('invalid'));
+    if (!nome) {
+      form.nome.classList.add('invalid');
+      valid = false;
+    }
+    if (telefone.length < 10) {
+      form.telefone.classList.add('invalid');
+      valid = false;
+    }
+    if (!valid) return;
+
+    let texto = `Olá! Quero agendar uma avaliação na RizoDent.\n\n*Nome:* ${nome}\n*Telefone:* ${form.telefone.value}`;
+    if (interesse) texto += `\n*Interesse:* ${interesse}`;
+
+    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`, '_blank');
+
+    const btn = form.querySelector('button[type="submit"]');
+    const original = btn.textContent;
+    btn.textContent = '✓ Abrindo o WhatsApp...';
+    setTimeout(() => {
+      btn.textContent = original;
+      form.reset();
+    }, 3000);
+  });
+}
+
+bindLeadForm(document.getElementById('leadForm'));
+bindLeadForm(document.getElementById('leadFormFinal'));
