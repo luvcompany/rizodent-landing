@@ -111,8 +111,8 @@ if (quizBox) {
       text: 'Pelo seu perfil, o protocolo tende a ser o caminho: uma prótese completa fixada sobre 4 a 6 implantes, que devolve a mastigação, a estética e a segurança de dentes fixos.',
     },
     dentadura: {
-      title: 'Overdenture ou Protocolo',
-      text: 'Quem não se adapta à dentadura costuma se beneficiar da overdenture (prótese encaixada sobre implantes) ou do protocolo (prótese fixa). A avaliação define qual faz mais sentido para o seu caso e orçamento.',
+      title: 'Protocolo ou Implante Zigomático',
+      text: 'Quem não se adapta à dentadura costuma se beneficiar do protocolo (prótese fixa sobre implantes). E se houver perda óssea severa na maxila, o implante zigomático garante os dentes fixos sem necessidade de enxerto. A avaliação define o caminho ideal.',
     },
     estetica: {
       title: 'Estética do Sorriso',

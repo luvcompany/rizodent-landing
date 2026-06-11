@@ -118,6 +118,14 @@ h3 { font-size: 1.15rem; }
 .logo span { color: var(--orange); }
 .logo img { height: 44px; width: auto; display: block; }
 .logo--footer img { height: 48px; }
+
+.icon-img {
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  vertical-align: -4px;
+}
+.icon-img--sm { height: 14px; width: 14px; vertical-align: -3px; }
 .nav { display: flex; gap: 24px; }
 .nav a {
   text-decoration: none;
