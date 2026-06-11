@@ -136,7 +136,7 @@ if (quizBox) {
           document.getElementById('quizResultTitle').textContent = `Indicação inicial: ${rec.title}`;
           document.getElementById('quizResultText').textContent = rec.text;
 
-          const msg = `Olá! Fiz o teste do site e a indicação inicial foi: ${rec.title}. Quero agendar uma avaliação para confirmar.`;
+          const msg = `Olá! Vim do site. Fiz o teste e a indicação inicial foi: ${rec.title}. Quero agendar uma avaliação para confirmar.`;
           document.getElementById('quizWhats').href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
           quizResult.hidden = false;
         }
@@ -212,7 +212,7 @@ if (track) {
 const SERVICOS = [
   'Implante Dentário', 'Prótese Dentária', 'Clareamento Dental', 'Facetas Dentárias',
   'Lente de Contato Dental', 'Aparelho Ortodôntico', 'Tratamento de Canal (Endodontia)',
-  'Extração Dentária', 'Limpeza Dentária (Profilaxia)',
+  'Extração Dentária', 'Limpeza Dentária (Profilaxia)', 'Outros',
 ];
 const CIDADES = ['Vitória da Conquista', 'Guanambi', 'Itabuna', 'Ipiaú'];
 // Horários de atendimento: Seg–Sex 07h30–18h | Sáb 07h30–14h | Dom fechado
@@ -311,7 +311,7 @@ function criarModal() {
     });
     if (!valid || !leadAtual) return;
 
-    let texto = `Olá! Quero agendar uma avaliação na RizoDent.\n\n*Nome:* ${leadAtual.nome}\n*Telefone:* ${leadAtual.telefone}` +
+    let texto = `Olá! Vim do site. Quero agendar uma avaliação na RizoDent.\n\n*Nome:* ${leadAtual.nome}\n*Telefone:* ${leadAtual.telefone}` +
       `\n*Serviço desejado:* ${servico.value}\n*Clínica:* ${cidade.value}\n*Dia:* ${dia.value}\n*Horário:* ${hora.value}`;
     if (mensagem) texto += `\n*Mensagem:* ${mensagem}`;
 
