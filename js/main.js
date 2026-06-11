@@ -228,10 +228,12 @@ document.querySelectorAll('form.lead-form').forEach((form) => {
 
     const nome = form.nome.value.trim();
     const telefone = phone.value.replace(/\D/g, '');
-    const interesse = form.interesse ? form.interesse.value : (form.dataset.interesse || '');
+    const servico = form.servico ? form.servico.value : '';
+    const cidade = form.cidade ? form.cidade.value : '';
+    const mensagem = form.mensagem ? form.mensagem.value.trim() : '';
 
     let valid = true;
-    [form.nome, phone].forEach((field) => field.classList.remove('invalid'));
+    [form.nome, phone, form.servico, form.cidade].forEach((field) => field && field.classList.remove('invalid'));
     if (!nome) {
       form.nome.classList.add('invalid');
       valid = false;
@@ -240,10 +242,20 @@ document.querySelectorAll('form.lead-form').forEach((form) => {
       phone.classList.add('invalid');
       valid = false;
     }
+    if (form.servico && !servico) {
+      form.servico.classList.add('invalid');
+      valid = false;
+    }
+    if (form.cidade && !cidade) {
+      form.cidade.classList.add('invalid');
+      valid = false;
+    }
     if (!valid) return;
 
     let texto = `Olá! Quero agendar uma avaliação na RizoDent.\n\n*Nome:* ${nome}\n*Telefone:* ${phone.value}`;
-    if (interesse) texto += `\n*Interesse:* ${interesse}`;
+    if (servico) texto += `\n*Serviço desejado:* ${servico}`;
+    if (cidade) texto += `\n*Unidade mais próxima:* ${cidade}`;
+    if (mensagem) texto += `\n*Mensagem:* ${mensagem}`;
 
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`, '_blank');
 

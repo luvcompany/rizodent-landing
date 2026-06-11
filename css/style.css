@@ -249,7 +249,8 @@ h3 { font-size: 1.15rem; }
   border-color: var(--orange);
   box-shadow: 0 0 0 3px rgba(249, 89, 6, .14);
 }
-.form__field input.invalid { border-color: #e02424; }
+.form__field input.invalid,
+.form__field select.invalid { border-color: #e02424; box-shadow: 0 0 0 3px rgba(224, 36, 36, .12); }
 .form__privacy { font-size: .75rem; color: var(--gray-600); text-align: center; }
 .form__privacy--light { color: rgba(255, 255, 255, .85); }
 
