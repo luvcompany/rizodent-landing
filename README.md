@@ -32,10 +32,23 @@ python3 -m http.server 8000
 ## Estrutura
 
 ```
-index.html      # Página única
-css/style.css   # Estilos
-js/main.js      # Menu, animações, máscara de telefone e envio do formulário
+index.html              # Home (landing principal com quiz, tabs e carrossel)
+tratamentos.html        # Hub com todos os tratamentos por categoria
+implante-unitario.html  # Página dedicada — implante de 1 dente
+protocolo.html          # Página dedicada — prótese fixa total sobre implantes
+overdenture.html        # Página dedicada — prótese encaixada sobre implantes
+lentes-e-facetas.html   # Página dedicada — estética com lentes/facetas
+clareamento.html        # Página dedicada — clareamento profissional
+clinica-geral.html      # Página dedicada — limpeza, restaurações e canal
+sobre.html              # Quem somos, estrutura e equipe
+resultados.html         # Depoimentos em vídeo e avaliações
+css/style.css           # Estilos compartilhados
+js/main.js              # Scripts compartilhados (defensivos por página)
 ```
+
+Cada página de tratamento segue o mesmo template de conversão: hero com CTA duplo,
+"o que é" + resumo rápido, benefícios, indicação, passo a passo, FAQ específico e
+formulário de agendamento — ideal para receber tráfego de anúncios segmentados.
 
 ## Pendências para o go-live
 
