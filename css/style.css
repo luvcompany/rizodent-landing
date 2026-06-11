@@ -112,8 +112,12 @@ h3 { font-size: 1.15rem; }
   text-decoration: none;
   color: var(--ink);
   letter-spacing: -.5px;
+  display: inline-flex;
+  align-items: center;
 }
 .logo span { color: var(--orange); }
+.logo img { height: 44px; width: auto; display: block; }
+.logo--footer img { height: 48px; }
 .nav { display: flex; gap: 24px; }
 .nav a {
   text-decoration: none;
